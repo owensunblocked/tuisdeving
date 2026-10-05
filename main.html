@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tuis Dev</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: #0b0b0f;
+        color: white;
+    }
+
+    header {
+        height: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 30px;
+        background: #111116;
+        border-bottom: 1px solid #25252d;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+
+    .logo {
+        font-size: 24px;
+        font-weight: 800;
+    }
+
+    .logo span {
+        color: #7c5cff;
+    }
+
+    .header-right {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    button {
+        border: 0;
+        border-radius: 8px;
+        padding: 11px 17px;
+        background: #7c5cff;
+        color: white;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #6948f0;
+    }
+
+    .secondary {
+        background: #202028;
+    }
+
+    .secondary:hover {
+        background: #2b2b35;
+    }
+
+    .danger {
+        background: #d83c55;
+    }
+
+    .danger:hover {
+        background: #bd3047;
+    }
+
+    main {
+        max-width: 1150px;
+        margin: auto;
+        padding: 35px 20px 80px;
+    }
+
+    .hero {
+        padding: 45px 0 35px;
+    }
+
+    .hero h1 {
+        margin: 0 0 12px;
+        font-size: 48px;
+    }
+
+    .hero p {
+        color: #9999a6;
+        font-size: 18px;
+        margin: 0;
+    }
+
+    .search {
+        width: 100%;
+        background: #15151c;
+        border: 1px solid #292934;
+        color: white;
+        border-radius: 10px;
+        padding: 15px;
+        font-size: 16px;
+        outline: none;
+        margin-bottom: 30px;
+    }
+
+    .search:focus,
+    input:focus,
+    textarea:focus {
+        border-color: #7c5cff;
+    }
+
+    .section-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 18px;
+    }
+
+    .section-title h2 {
+        margin: 0;
+    }
+
+    .projects {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 18px;
+    }
+
+    .project-card {
+        background: #14141a;
+        border: 1px solid #292934;
+        border-radius: 13px;
+        padding: 20px;
+        cursor: pointer;
+        transition: .15s;
+    }
+
+    .project-card:hover {
+        transform: translateY(-3px);
+        border-color: #7c5cff;
+    }
+
+    .project-card h3 {
+        margin: 0 0 8px;
+    }
+
+    .project-card p {
+        color: #9999a6;
+        min-height: 42px;
+    }
+
+    .creator {
+        color: #8e7aff;
+        font-size: 14px;
+    }
+
+    .files-count {
+        color: #777784;
+        font-size: 13px;
+        margin-top: 15px;
+    }
+
+    .empty {
+        padding: 40px;
+        text-align: center;
+        background: #14141a;
+        border: 1px solid #292934;
+        border-radius: 12px;
+        color: #888894;
+    }
+
+    .modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,.75);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+        padding: 20px;
+    }
+
+    .modal.active {
+        display: flex;
+    }
+
+    .modal-box {
+        width: 100%;
+        max-width: 600px;
+        max-height: 90vh;
+        overflow-y: auto;
+        background: #15151c;
+        border: 1px solid #2b2b35;
+        border-radius: 14px;
+        padding: 25px;
+    }
+
+    .modal-box h2 {
+        margin-top: 0;
+    }
+
+    label {
+        display: block;
+        margin: 15px 0 7px;
+        font-size: 14px;
+        color: #aaaab5;
+    }
+
+    input,
+    textarea {
+        width: 100%;
+        background: #0d0d12;
+        border: 1px solid #2b2b35;
+        border-radius: 8px;
+        color: white;
+        padding: 12px;
+        outline: none;
+        font-family: inherit;
+    }
+
+    textarea {
+        resize: vertical;
+        min-height: 100px;
+    }
+
+    .modal-buttons {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .file-list {
+        margin-top: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .file-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        background: #0e0e13;
+        border: 1px solid #292934;
+        border-radius: 9px;
+        padding: 12px;
+    }
+
+    .file-name {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .file-size {
+        color: #777784;
+        font-size: 12px;
+    }
+
+    .user-box {
+        background: #14141a;
+        border: 1px solid #292934;
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 25px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .user-name {
+        font-weight: bold;
+    }
+
+    .tui-badge {
+        display: inline-block;
+        margin-left: 8px;
+        padding: 3px 7px;
+        border-radius: 5px;
+        background: #7c5cff;
+        font-size: 11px;
+    }
+
+    .hidden {
+        display: none !important;
+    }
+
+    .upload-box {
+        border: 1px dashed #444450;
+        border-radius: 10px;
+        padding: 20px;
+        text-align: center;
+        margin-top: 10px;
+        color: #9999a6;
+    }
+
+    .upload-box input {
+        border: 0;
+        padding: 10px 0;
+        background: transparent;
+    }
+
+    .project-detail h1 {
+        margin-top: 0;
+    }
+
+    .back {
+        margin-bottom: 20px;
+    }
+
+    @media(max-width: 600px) {
+        .hero h1 {
+            font-size: 36px;
+        }
+
+        header {
+            padding: 0 15px;
+        }
+
+        .header-right button {
+            padding: 9px 11px;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">Tuis <span>Dev</span></div>
+
+    <div class="header-right">
+        <span id="headerUser"></span>
+        <button id="loginButton" onclick="openNameModal()">Choose Name</button>
+        <button id="createButton" class="hidden" onclick="openCreateModal()">+ Create Project</button>
+    </div>
+</header>
+
+<main>
+
+    <section class="hero">
+        <h1>Build. Share. Download.</h1>
+        <p>A place for developers to share their projects and Unity files.</p>
+    </section>
+
+    <div id="userBox" class="user-box hidden">
+        <div>
+            Logged in as
+            <span class="user-name" id="currentUser"></span>
+            <span id="tuiBadge" class="tui-badge hidden">PROJECT CREATOR</span>
+        </div>
+
+        <button class="secondary" onclick="logout()">Log Out</button>
+    </div>
+
+    <input
+        id="searchInput"
+        class="search"
+        placeholder="Search projects..."
+        oninput="renderProjects()"
+    >
+
+    <div class="section-title">
+        <h2>Projects</h2>
+        <span id="projectCount"></span>
+    </div>
+
+    <div id="projects" class="projects"></div>
+
+</main>
+
+
+<!-- NAME MODAL -->
+
+<div class="modal" id="nameModal">
+    <div class="modal-box">
+
+        <h2>Choose your name</h2>
+
+        <p style="color:#9999a6;">
+            Each name can only belong to one person on this browser.
+            The name <b>Tui</b> has special project-creation permissions.
+        </p>
+
+        <label>Username</label>
+
+        <input
+            id="nameInput"
+            maxlength="20"
+            placeholder="Enter a name..."
+        >
+
+        <div id="nameError" style="color:#ff526b;margin-top:10px;"></div>
+
+        <div class="modal-buttons">
+            <button class="secondary" onclick="closeModal('nameModal')">
+                Cancel
+            </button>
+
+            <button onclick="chooseName()">
+                Continue
+            </button>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- CREATE PROJECT MODAL -->
+
+<div class="modal" id="createModal">
+    <div class="modal-box">
+
+        <h2>Create Project</h2>
+
+        <label>Project Name</label>
+
+        <input
+            id="projectName"
+            maxlength="50"
+            placeholder="My GTAG Project"
+        >
+
+        <label>Description</label>
+
+        <textarea
+            id="projectDescription"
+            placeholder="Describe your project..."
+        ></textarea>
+
+        <label>Project Files</label>
+
+        <div class="upload-box">
+
+            <p>
+                Allowed files:
+                ZIP, RAR, CS, TXT, UNITYPACKAGE
+            </p>
+
+            <input
+                id="projectFiles"
+                type="file"
+                multiple
+                accept=".zip,.rar,.cs,.txt,.unitypackage"
+            >
+
+        </div>
+
+        <div id="selectedFiles" class="file-list"></div>
+
+        <div class="modal-buttons">
+
+            <button
+                class="secondary"
+                onclick="closeModal('createModal')"
+            >
+                Cancel
+            </button>
+
+            <button onclick="createProject()">
+                Create Project
+            </button>
+
+        </div>
+
+    </div>
+</div>
+
+
+<!-- PROJECT VIEW MODAL -->
+
+<div class="modal" id="projectModal">
+    <div class="modal-box project-detail">
+
+        <button
+            class="secondary back"
+            onclick="closeModal('projectModal')"
+        >
+            ← Back
+        </button>
+
+        <h1 id="detailName"></h1>
+
+        <div id="detailCreator" class="creator"></div>
+
+        <p id="detailDescription" style="color:#9999a6;"></p>
+
+        <h3>Files</h3>
+
+        <div id="detailFiles" class="file-list"></div>
+
+    </div>
+</div>
+
+
+<script>
+
+const ALLOWED_EXTENSIONS = [
+    "zip",
+    "rar",
+    "cs",
+    "txt",
+    "unitypackage"
+];
+
+let currentUser = localStorage.getItem("tuisDevCurrentUser");
+
+let users = JSON.parse(
+    localStorage.getItem("tuisDevUsers") || "[]"
+);
+
+let projects = JSON.parse(
+    localStorage.getItem("tuisDevProjects") || "[]"
+);
+
+
+// -------------------------
+// INITIALIZE
+// -------------------------
+
+updateUI();
+renderProjects();
+
+
+// -------------------------
+// NAME SYSTEM
+// -------------------------
+
+function openNameModal() {
+    document.getElementById("nameInput").value = "";
+    document.getElementById("nameError").textContent = "";
+
+    document.getElementById("nameModal")
+        .classList.add("active");
+}
+
+
+function chooseName() {
+
+    const input = document
+        .getElementById("nameInput")
+        .value
+        .trim();
+
+    const error = document.getElementById("nameError");
+
+    if (!input) {
+        error.textContent = "Please enter a name.";
+        return;
+    }
+
+    if (input.length < 2) {
+        error.textContent = "Name must be at least 2 characters.";
+        return;
+    }
+
+    const existing = users.find(
+        user => user.toLowerCase() === input.toLowerCase()
+    );
+
+    if (existing) {
+        error.textContent =
+            "That name is already taken.";
+        return;
+    }
+
+    users.push(input);
+
+    localStorage.setItem(
+        "tuisDevUsers",
+        JSON.stringify(users)
+    );
+
+    currentUser = input;
+
+    localStorage.setItem(
+        "tuisDevCurrentUser",
+        currentUser
+    );
+
+    closeModal("nameModal");
+
+    updateUI();
+}
+
+
+// -------------------------
+// LOGOUT
+// -------------------------
+
+function logout() {
+
+    currentUser = null;
+
+    localStorage.removeItem(
+        "tuisDevCurrentUser"
+    );
+
+    updateUI();
+}
+
+
+// -------------------------
+// UI
+// -------------------------
+
+function updateUI() {
+
+    const headerUser =
+        document.getElementById("headerUser");
+
+    const loginButton =
+        document.getElementById("loginButton");
+
+    const createButton =
+        document.getElementById("createButton");
+
+    const userBox =
+        document.getElementById("userBox");
+
+    const currentUserElement =
+        document.getElementById("currentUser");
+
+    const tuiBadge =
+        document.getElementById("tuiBadge");
+
+    if (!currentUser) {
+
+        headerUser.textContent = "";
+
+        loginButton.classList.remove("hidden");
+
+        createButton.classList.add("hidden");
+
+        userBox.classList.add("hidden");
+
+        return;
+    }
+
+    headerUser.textContent = currentUser;
+
+    loginButton.classList.add("hidden");
+
+    userBox.classList.remove("hidden");
+
+    currentUserElement.textContent =
+        currentUser;
+
+    if (currentUser.toLowerCase() === "tui") {
+
+        createButton.classList.remove("hidden");
+
+        tuiBadge.classList.remove("hidden");
+
+    } else {
+
+        createButton.classList.add("hidden");
+
+        tuiBadge.classList.add("hidden");
+
+    }
+}
+
+
+// -------------------------
+// CREATE PROJECT
+// -------------------------
+
+function openCreateModal() {
+
+    if (!isTui()) {
+        alert("Only Tui can create projects.");
+        return;
+    }
+
+    document.getElementById("projectName").value = "";
+    document.getElementById("projectDescription").value = "";
+    document.getElementById("projectFiles").value = "";
+
+    document.getElementById("selectedFiles").innerHTML = "";
+
+    document.getElementById("createModal")
+        .classList.add("active");
+}
+
+
+function isTui() {
+
+    return currentUser &&
+        currentUser.toLowerCase() === "tui";
+}
+
+
+document.getElementById("projectFiles")
+    .addEventListener("change", function() {
+
+        const container =
+            document.getElementById("selectedFiles");
+
+        container.innerHTML = "";
+
+        for (const file of this.files) {
+
+            const extension =
+                file.name
+                    .split(".")
+                    .pop()
+                    .toLowerCase();
+
+            if (!ALLOWED_EXTENSIONS.includes(extension)) {
+
+                alert(
+                    file.name +
+                    " is not an allowed file type."
+                );
+
+                continue;
+            }
+
+            const item =
+                document.createElement("div");
+
+            item.className = "file-item";
+
+            item.innerHTML = `
+                <div>
+                    <div class="file-name">${escapeHTML(file.name)}</div>
+                    <div class="file-size">
+                        ${formatBytes(file.size)}
+                    </div>
+                </div>
+            `;
+
+            container.appendChild(item);
+        }
+    });
+
+
+async function createProject() {
+
+    if (!isTui()) {
+        alert("Only Tui can create projects.");
+        return;
+    }
+
+    const name =
+        document.getElementById("projectName")
+            .value
+            .trim();
+
+    const description =
+        document.getElementById("projectDescription")
+            .value
+            .trim();
+
+    const fileInput =
+        document.getElementById("projectFiles");
+
+    if (!name) {
+        alert("Enter a project name.");
+        return;
+    }
+
+    if (fileInput.files.length === 0) {
+        alert("Add at least one project file.");
+        return;
+    }
+
+    const files = [];
+
+    for (const file of fileInput.files) {
+
+        const extension =
+            file.name
+                .split(".")
+                .pop()
+                .toLowerCase();
+
+        if (!ALLOWED_EXTENSIONS.includes(extension)) {
+            continue;
+        }
+
+        const data =
+            await fileToDataURL(file);
+
+        files.push({
+            name: file.name,
+            size: file.size,
+            type: file.type,
+            data: data
+        });
+    }
+
+    if (files.length === 0) {
+        alert("No valid files were selected.");
+        return;
+    }
+
+    const project = {
+
+        id:
+            Date.now().toString(),
+
+        name: name,
+
+        description:
+            description || "No description.",
+
+        creator:
+            currentUser,
+
+        created:
+            new Date().toISOString(),
+
+        files:
+            files
+    };
+
+    projects.unshift(project);
+
+    try {
+
+        localStorage.setItem(
+            "tuisDevProjects",
+            JSON.stringify(projects)
+        );
+
+    } catch (error) {
+
+        alert(
+            "The project is too large for browser storage. " +
+            "For large ZIP/RAR/UnityPackage files, you need a real server."
+        );
+
+        projects.shift();
+
+        return;
+    }
+
+    closeModal("createModal");
+
+    renderProjects();
+}
+
+
+// -------------------------
+// PROJECT LIST
+// -------------------------
+
+function renderProjects() {
+
+    const container =
+        document.getElementById("projects");
+
+    const search =
+        document.getElementById("searchInput")
+            .value
+            .toLowerCase()
+            .trim();
+
+    const filtered =
+        projects.filter(project => {
+
+            return (
+                project.name.toLowerCase().includes(search) ||
+                project.description.toLowerCase().includes(search)
+            );
+
+        });
+
+    document.getElementById("projectCount")
+        .textContent =
+        filtered.length + " project" +
+        (filtered.length === 1 ? "" : "s");
+
+    container.innerHTML = "";
+
+    if (filtered.length === 0) {
+
+        container.innerHTML = `
+            <div class="empty">
+                No projects found.
+            </div>
+        `;
+
+        return;
+    }
+
+    filtered.forEach(project => {
+
+        const card =
+            document.createElement("div");
+
+        card.className = "project-card";
+
+        card.onclick = () =>
+            openProject(project.id);
+
+        card.innerHTML = `
+
+            <h3>
+                ${escapeHTML(project.name)}
+            </h3>
+
+            <div class="creator">
+                Created by ${escapeHTML(project.creator)}
+            </div>
+
+            <p>
+                ${escapeHTML(project.description)}
+            </p>
+
+            <div class="files-count">
+                ${project.files.length}
+                file${project.files.length === 1 ? "" : "s"}
+            </div>
+        `;
+
+        container.appendChild(card);
+    });
+}
+
+
+// -------------------------
+// OPEN PROJECT
+// -------------------------
+
+function openProject(id) {
+
+    const project =
+        projects.find(p => p.id === id);
+
+    if (!project) return;
+
+    document.getElementById("detailName")
+        .textContent = project.name;
+
+    document.getElementById("detailCreator")
+        .textContent =
+        "Created by " + project.creator;
+
+    document.getElementById("detailDescription")
+        .textContent =
+        project.description;
+
+    const fileContainer =
+        document.getElementById("detailFiles");
+
+    fileContainer.innerHTML = "";
+
+    project.files.forEach(file => {
+
+        const item =
+            document.createElement("div");
+
+        item.className = "file-item";
+
+        const info =
+            document.createElement("div");
+
+        info.innerHTML = `
+            <div class="file-name">
+                ${escapeHTML(file.name)}
+            </div>
+
+            <div class="file-size">
+                ${formatBytes(file.size)}
+            </div>
+        `;
+
+        const button =
+            document.createElement("button");
+
+        button.textContent = "Download";
+
+        button.onclick = function(event) {
+
+            event.stopPropagation();
+
+            downloadFile(file);
+        };
+
+        item.appendChild(info);
+        item.appendChild(button);
+
+        fileContainer.appendChild(item);
+    });
+
+    document.getElementById("projectModal")
+        .classList.add("active");
+}
+
+
+// -------------------------
+// DOWNLOAD
+// -------------------------
+
+function downloadFile(file) {
+
+    const link =
+        document.createElement("a");
+
+    link.href = file.data;
+
+    link.download = file.name;
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    link.remove();
+}
+
+
+// -------------------------
+// FILE READER
+// -------------------------
+
+function fileToDataURL(file) {
+
+    return new Promise((resolve, reject) => {
+
+        const reader =
+            new FileReader();
+
+        reader.onload =
+            () => resolve(reader.result);
+
+        reader.onerror =
+            reject;
+
+        reader.readAsDataURL(file);
+    });
+}
+
+
+// -------------------------
+// MODALS
+// -------------------------
+
+function closeModal(id) {
+
+    document.getElementById(id)
+        .classList.remove("active");
+}
+
+
+document.querySelectorAll(".modal")
+    .forEach(modal => {
+
+        modal.addEventListener("click", function(event) {
+
+            if (event.target === modal) {
+                modal.classList.remove("active");
+            }
+
+        });
+
+    });
+
+
+// -------------------------
+// HELPERS
+// -------------------------
+
+function formatBytes(bytes) {
+
+    if (bytes === 0)
+        return "0 Bytes";
+
+    const sizes = [
+        "Bytes",
+        "KB",
+        "MB",
+        "GB"
+    ];
+
+    const i =
+        Math.floor(
+            Math.log(bytes) /
+            Math.log(1024)
+        );
+
+    return (
+        parseFloat(
+            (bytes /
+            Math.pow(1024, i))
+            .toFixed(2)
+        )
+        + " "
+        + sizes[i]
+    );
+}
+
+
+function escapeHTML(text) {
+
+    return String(text)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+</script>
+
+</body>
+</html>
